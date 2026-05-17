@@ -1,0 +1,248 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+<title>{{Content.cusername}}的买卖中心</title>
+<link href="/static/asserts/css/bootstrap.css" rel='stylesheet' type='text/css' />
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="/static/asserts/js/jquery.min.js"></script>
+<!-- Custom Theme files -->
+<link href="/static/asserts/css/style.css" rel='stylesheet' type='text/css' />
+ <!-- Custom Theme files -->
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <meta name="keywords" content="" />
+<!--<link href='http://fonts.googleapis.com/css?family=Asap:400,700,400italic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600' rel='stylesheet' type='text/css'> -->
+ <!---- start-smoth-scrolling---->
+<script type="text/javascript" src="/static/asserts/js/move-top.js"></script>
+<script type="text/javascript" src="/static/asserts/js/easing.js"></script>
+	<script type="text/javascript">
+			jQuery(document).ready(function($) {
+				$(".scroll").click(function(event){
+					event.preventDefault();
+					$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
+				});
+			});
+		</script>
+ <!---- start-smoth-scrolling---->
+</head>
+	<body>
+		<!-- container -->
+			<!-- header -->
+			<div id="home" class="header">
+				<div class="container">
+				<!-- top-hedader -->
+				<div class="top-header">
+					<!-- /logo -->
+					<!--top-nav---->
+					<div class="top-nav">
+					<div class="navigation">
+					<div class="logo">
+						<h1><a href="/">循环青年商家主页</a></h1>
+					</div>
+					<div class="navigation-right">
+						<span class="menu"><img src="../../static/asserts/images/menu.png" alt=" " /></span>
+						<nav class="link-effect-3" id="link-effect-3">
+							<ul class="nav1 nav nav-wil">
+								<li class="active"><a href="/user/info/">返回用户中心</a></li>
+								<li><a class="scroll" data-hover="联系我" href="#contact">联系我</a></li>
+							</ul>
+						</nav>
+							<!-- script-for-menu -->
+								<script>
+								   $( "span.menu" ).click(function() {
+									 $( "ul.nav1" ).slideToggle( 300, function() {
+									 // Animation complete.
+									  });
+									 });
+								</script>
+							<!-- /script-for-menu -->
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<!-- /top-hedader -->
+				</div>
+			<div class="banner-info">
+				<div class="col-md-7 header-right">
+					<h1>Hi !</h1>
+					<h6>{{ user.uname }}，这是我的资料哦。</h6>
+					<ul class="address">
+
+					<li>
+							<ul class="address-text">
+								<li><b>用户名</b></li>
+								<li>{{ shoper.uname }}</li>
+							</ul>
+						</li>
+						<li>
+							<ul class="address-text">
+								<li><b>性别</b></li>
+								<li>
+                                  {% if shoper.usex %}
+                                    {{ shoper.usex }}
+                                  {% else %}
+                                    暂无填写
+                                  {% endif %}
+                                </li>
+							</ul>
+						</li>
+						<li>
+							<ul class="address-text">
+								<li><b>年龄</b></li>
+								<li>
+                                  {% if shoper.uage %}
+                                    {{ shoper.uage }}
+                                  {% else %}
+                                    暂无填写
+                                  {% endif %}
+                                </li>
+							</ul>
+						</li>
+						<li>
+							<ul class="address-text">
+								<li><b>发货地址 </b></li>
+								<li>
+                                  {% if shoper.uaddress %}
+                                    {{ shoper.uaddress }}
+                                  {% else %}
+                                    暂无填写
+                                  {% endif %}
+                                </li>
+							</ul>
+						</li>
+						<li>
+							<ul class="address-text">
+								<li><b>邮箱 </b></li>
+								<li>
+                                  {% if shoper.uemail %}
+                                    {{ shoper.uemail }}
+                                  {% else %}
+                                    暂无填写
+                                  {% endif %}
+                                </li>
+							</ul>
+						</li>
+						<li>
+							<ul class="address-text">
+								<li><b>联系方式 </b></li>
+								<li>
+                                  {% if shoper.uphone %}
+                                    {{ shoper.uphone }}
+                                  {% else %}
+                                    暂无填写
+                                  {% endif %}
+                                </li>
+							</ul>
+						</li>
+                        <li>
+							<ul class="address-text">
+								<li><b>个性宣言</b></li>
+								<li>
+                                  {% if shoper.upersonInf %}
+                                    {{ shoper.upersonInf }}
+                                  {% else %}
+                                    暂无填写
+                                  {% endif %}
+                                </li>
+							</ul>
+						</li>
+
+					</ul>
+				</div>
+				<div class="col-md-5 header-left">
+					<img src="{{ MEDIA_URL }}{{ shoper.ulogo }}" style="width:379px;height:379px;overflow: hidden;object-fit: cover;" alt="">
+				</div>
+				<div class="clearfix"> </div>
+
+		      </div>
+			</div>
+		</div>
+	</div>
+<div class="footer" id="contact">
+	<div class="container">
+	<div class="service-head one text-center">
+						<h4>联系我</h4>
+						<h3>快<span>和我联系吧</span></h3>
+						<span class="border two"></span>
+					</div>
+		<div class="mail_us">
+			<div class="col-md-6 mail_left">
+				<div class="contact-grid1-left">
+					<div class="contact-grid1-left1">
+						<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+						<h4>邮箱联系</h4>
+						<ul>
+							<li>邮箱：<a href="mailto:info@example.com">{{ shoper.uemail }}</a></li>
+						</ul>
+					</div>
+				</div>
+					<div class="contact-grid1-left">
+						<div class="contact-grid1-left1">
+							<span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
+							<h4>电话联系</h4>
+							<ul>
+								<li>联系电话: {{ shoper.uphone }}</li>
+							</ul>
+						</div>
+					</div>
+					<div class="contact-grid1-left">
+						<div class="contact-grid1-left1">
+							<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+							<h4>发货地址</h4>
+							<ul>
+								<li>地址: {{ shoper.uaddress }}</li>
+								<li>收件人：{{ shoper.ushou }}</li>
+							</ul>
+						</div>
+					</div>
+				<div class="clearfix"> </div>
+			</div>
+			<div class="col-md-6 mail_right">
+				{% if Content %}
+				<form action="{% url "df_user:shoper_information" Content.cusername %}" method="post">
+                    {% csrf_token %}
+                    <input type="text" name="title" required="" value="商品名称">
+					<textarea name="Message" required="">Message...</textarea>
+					<input type="submit" value="什么？想了解商品？发消息给我吧！">
+
+				</form>
+				{% endif %}
+			</div>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+</div>
+
+
+<a href="#home" id="toTop" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
+	<!--start-smooth-scrolling-->
+						<script type="text/javascript">
+									$(document).ready(function() {
+										/*
+										var defaults = {
+								  			containerID: 'toTop', // fading element id
+											containerHoverID: 'toTopHover', // fading element hover id
+											scrollSpeed: 1200,
+											easingType: 'linear'
+								 		};
+										*/
+
+										$().UItoTop({ easingType: 'easeOutQuart' });
+
+									});
+								</script>
+								<!--end-smooth-scrolling-->
+<!-- //for bootstrap working -->
+	<script src="/static/asserts/js/bootstrap.js"></script>
+{#   消息弹框     #}
+    {% if messages %}
+    <script>
+        {% for msg in messages %}
+            alert('{{ msg.message }}');
+        {% endfor %}
+    </script>
+    {% endif %}
+
+	</body>
+</html>
