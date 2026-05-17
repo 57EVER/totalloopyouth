@@ -40,7 +40,6 @@
                 <h3 class="common_title2">修改资料</h3>
                 <div class="site_con">
                     <form th:action="@{/user/changeInformation/}" method="post" enctype="multipart/form-data">
-                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                         <div class="form_group_logo">
                             <img th:src="@{/media/{logo}(logo=${user.ulogo})}" alt="头像">
                         </div>

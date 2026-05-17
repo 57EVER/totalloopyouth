@@ -39,7 +39,6 @@
                 <h3 class="common_title2">商品发布</h3>
                 <div class="site_con">
                     <form th:action="@{/user/publishers/}" method="post" enctype="multipart/form-data">
-                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                         <div class="form_group">
                             <label>商品名称：</label>
                             <input type="text" name="title">

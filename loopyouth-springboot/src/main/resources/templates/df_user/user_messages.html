@@ -56,7 +56,6 @@
                     </th:block>
                 </div>
                 <form th:action="@{/user/person_message/(username=${username})}" method="post">
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                     <input class="nr" type="text" name="title" required="" placeholder="请输入内容。。。">
                     <input class="sub" type="submit" value="发送">
                 </form>

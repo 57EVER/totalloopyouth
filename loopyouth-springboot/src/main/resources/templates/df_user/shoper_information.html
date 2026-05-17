@@ -180,7 +180,6 @@
             </div>
             <div class="col-md-6 mail_right">
                 <form th:if="${name}" th:action="@{/user/shoper_information/{n}/(n=${name})}" method="post">
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                     <input type="text" name="title" required="" value="商品名称">
                     <textarea name="Message" required="">Message...</textarea>
                     <input type="submit" value="什么？想了解商品？发消息给我吧！">

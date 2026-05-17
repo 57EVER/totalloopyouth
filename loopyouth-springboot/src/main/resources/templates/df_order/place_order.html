@@ -4,8 +4,6 @@
       layout:decorate="~{base}">
 <head>
 <th:block layout:fragment="head">
-    <meta name="_csrf" th:content="${_csrf.token}"/>
-    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <script>
     $(function () {
         $('.col07').each(function () {
@@ -94,9 +92,6 @@
 
     <script th:inline="javascript">
         var totalTransPrice = [[${total_trans_price}]];
-        var csrfToken = $("meta[name='_csrf']").attr("content");
-        var csrfHeader = $("meta[name='_csrf_header']").attr("content");
-
         $('#order_btn').click(function() {
             // check shipping address
             var number = 0;
@@ -129,9 +124,6 @@
                 url: '/order/push/',
                 type: 'POST',
                 data: data,
-                beforeSend: function(xhr) {
-                    xhr.setRequestHeader(csrfHeader, csrfToken);
-                },
                 success: function (data) {
                     if (data.ok == 1){
                         localStorage.setItem('order_finish',2);
