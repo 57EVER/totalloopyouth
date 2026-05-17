@@ -1,0 +1,74 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<body>
+<th:block layout:fragment="center_body">
+    <div class="main_con clearfix">
+        <div class="left_menu_con1 clearfix">
+            <h3>消息中心</h3>
+            <div class="information clearfix">
+                <a th:href="@{/user/myself_information/}"><img th:src="@{/media/{logo}(logo=${user.ulogo})}" alt="头像"></a>
+            </div>
+            <ul>
+                <th:block th:each="person : ${persons}">
+                    <th:block th:each="img : ${imgs}">
+                        <!-- unread message: person[0]=cusername, person[1]=ccheck -->
+                        <li th:if="${person[0] == img.uname and person[1] == false}">
+                            <a style="background: orangered;-webkit-animation: twinkling 1s infinite ease-in-out;"
+                               th:href="@{/user/person_message/(username=${person[0]})}">
+                                <img th:src="@{/media/{logo}(logo=${img.ulogo})}" style="width: 50px;height:50px;border-radius: 50%;overflow: hidden;object-fit: cover;" alt="">
+                                <span style="color: darkgreen" th:text="${img.uname}"></span>
+                            </a>
+                        </li>
+                        <!-- read message -->
+                        <li th:if="${person[0] == img.uname and person[1] == true}">
+                            <a th:href="@{/user/person_message/(username=${person[0]})}">
+                                <img th:src="@{/media/{logo}(logo=${img.ulogo})}" style="width: 50px;height:50px;border-radius: 50%;overflow: hidden;object-fit: cover;" alt="">
+                                <span style="color: darkgreen" th:text="${img.uname}"></span>
+                            </a>
+                        </li>
+                    </th:block>
+                </th:block>
+                <li th:if="${persons == null or #lists.isEmpty(persons)}">
+                    暂无消息
+                </li>
+            </ul>
+        </div>
+        <div class="right_content clearfix">
+                <div class="site_con">
+                    <p>消息内容</p>
+                    <th:block th:each="information : ${informations}">
+                        <div class="form_group1" th:if="${information.cusername == username}">
+                            <div>
+                                <img th:src="@{/media/{logo}(logo=${logo.ulogo})}" style="width: 30px;height:30px;border-radius: 50%;overflow: hidden;object-fit: cover;" alt="">
+                                <h6><span th:text="${information.cusername}"></span>:<span th:text="${information.ctitle}"></span>,<span th:text="${information.ccontentChart}"></span></h6>
+                            </div>
+                            <p th:text="${information.datePublish}"></p>
+                        </div>
+                        <div class="form_group3" th:if="${information.cusername1 == username and information.cusername == user.uname}">
+                            <div>
+                                <img th:src="@{/media/{logo}(logo=${user.ulogo})}" style="width: 30px;height:30px;border-radius: 50%;overflow: hidden;object-fit: cover;" alt="">
+                                <h6><span th:text="${information.ccontentChart}"></span>:<span th:text="${information.cusername}"></span></h6>
+                            </div>
+                            <p th:text="${information.datePublish}"></p>
+                        </div>
+                    </th:block>
+                </div>
+                <form th:action="@{/user/person_message/(username=${username})}" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <input class="nr" type="text" name="title" required="" placeholder="请输入内容。。。">
+                    <input class="sub" type="submit" value="发送">
+                </form>
+        </div>
+    </div>
+    <!-- flash message alerts -->
+    <div th:if="${message}">
+        <script th:inline="javascript">
+            var msg = [[${message}]];
+            alert(msg);
+        </script>
+    </div>
+</th:block>
+</body>
+</html>
