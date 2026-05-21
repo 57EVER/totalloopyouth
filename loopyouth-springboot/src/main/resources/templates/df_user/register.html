@@ -1,0 +1,136 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base_foot}">
+<head>
+<th:block layout:fragment="head">
+    <script type="text/javascript" src="/static/js/register.js"></script>
+    <script type="text/javascript">
+    $(function(){
+        var error_name = false, error_password = false, error_check_password = false, error_email = false, error_check = false;
+        $('#user_name').blur(function() { check_user_name(); });
+        $('#pwd').blur(function() { check_pwd(); });
+        $('#cpwd').blur(function() { check_cpwd(); });
+        $('#email').blur(function() { check_email(); });
+        $('#allow').click(function() {
+            if($(this).is(':checked')){ error_check = false; $(this).siblings('span').hide(); }
+            else { error_check = true; $(this).siblings('span').html('请勾选同意'); $(this).siblings('span').show(); }
+        });
+        function check_user_name(){
+            var len = $('#user_name').val().length;
+            if(len<5||len>20){ $('#user_name').next().html('请输入5-20个字符').show(); error_name = true; }
+            else {
+                $.get('/user/register_exist/?uname='+$('#user_name').val(),function(data){
+                    if (data.count >= 1) { $('#user_name').next().html('用户名已存在').show(); error_name = true; }
+                    else { $('#user_name').next().hide(); error_name = false; }
+                });
+            }
+        }
+        function check_pwd(){
+            var len = $('#pwd').val().length;
+            if(len<4||len>20){ $('#pwd').next().html('密码4-20位').show(); error_password = true; }
+            else { $('#pwd').next().hide(); error_password = false; }
+        }
+        function check_cpwd(){
+            if($('#pwd').val()!=$('#cpwd').val()){ $('#cpwd').next().html('两次密码不一致').show(); error_check_password = true; }
+            else { $('#cpwd').next().hide(); error_check_password = false; }
+        }
+        function check_email(){
+            var re = /^[a-z0-9][\w\.\-]*@[a-z0-9\-]+(\.[a-z]{2,5}){1,2}$/;
+            if(!re.test($('#email').val())){ $('#email').next().html('邮箱格式不正确').show(); error_email = true; }
+            else {
+                $.get('/user/register_exist/?uemail='+$('#email').val(),function(data){
+                    if (data.email_count >= 1) { $('#email').next().html('邮箱已存在').show(); error_email = true; }
+                    else { $('#email').next().hide(); error_email = false; }
+                });
+            }
+        }
+        $('#reg_form').submit(function() {
+            check_user_name(); check_pwd(); check_cpwd(); check_email();
+            return !(error_name || error_password || error_check_password || error_email || error_check);
+        });
+    });
+    </script>
+</th:block>
+</head>
+<body>
+<th:block layout:fragment="body">
+<div class="shadow clearfix" id="shadow">
+    <div class="close clearfix">
+        <div class="model clearfix">
+            <div class="site_con">
+                <p style="text-align:center;font-size:16px;font-weight:600;color:var(--gray-900);padding:16px 0">使用协议</p>
+                <div style="padding:0 16px;font-size:14px;color:var(--gray-600);line-height:1.8">
+                    <p>一、甲方权利：甲方在乙方举办的活动,带入自己的物资;甲方可以合理要求乙方协助现场实践。</p>
+                    <p style="margin-top:12px">二、甲方义务：甲方自己所提供的物资，食品饮料类必须在保质期内,电器电子物品必须有三包等。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="register_con">
+        <div class="l_con fl">
+            <div class="reg_banner"><img src="/static/images/logo.jpg" style="width:300px;height:440px;margin-right:20px;border-radius:12px;object-fit:cover;filter:grayscale(20%)"></div>
+        </div>
+        <div class="r_con fr">
+            <div class="reg_title clearfix">
+                <h1>注册</h1>
+                <a th:href="@{/user/login/}" style="color:var(--gray-500)">已有账号？登录</a>
+            </div>
+            <div class="reg_form clearfix">
+                <form th:action="@{/user/register_handle/}" id='reg_form' method="post">
+                <ul>
+                    <li>
+                        <label>用户名:</label>
+                        <input type="text" name="user_name" id="user_name">
+                        <span class="error_tip">提示信息</span>
+                    </li>
+                    <li>
+                        <label>密码:</label>
+                        <input type="password" name="pwd" id="pwd">
+                        <span class="error_tip">提示信息</span>
+                    </li>
+                    <li>
+                        <label>确认密码:</label>
+                        <input type="password" name="confirm_pwd" id="cpwd">
+                        <span class="error_tip">提示信息</span>
+                    </li>
+                    <li>
+                        <label>邮箱:</label>
+                        <input type="text" name="email" id="email">
+                        <span class="error_tip">提示信息</span>
+                    </li>
+                    <li>
+                        <label>学号:</label>
+                        <input type="text" id="student_id" placeholder="请输入学号">
+                        <span class="error_tip" style="display:none;">提示信息</span>
+                    </li>
+                    <li class="agreement">
+                        <input type="checkbox" name="allow" id="allow" checked="checked">
+                        <label>同意<a href="javascript:void(0)" class="btn" style="color:var(--gray-500);border-bottom:1px solid var(--gray-300)">使用协议</a></label>
+                        <span class="error_tip2">提示信息</span>
+                    </li>
+                    <li class="reg_sub">
+                        <input type="submit" value="注 册">
+                    </li>
+                </ul>
+                </form>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript">
+    let btn = document.getElementsByClassName('btn');
+    let shadow = document.getElementById('shadow');
+    for (var i = 0, len = btn.length; i < len; i++) {
+        btn[i].addEventListener('click', function (e) { shadow.className = 'shadow show'; return false }, false);
+        shadow.addEventListener('click', function(e) {
+            let target = e.target; let _class = target.className;
+            if(_class.includes('shadow') || _class.includes('close')) { shadow.className = 'shadow' }
+            return false
+        }, false);
+    }
+</script>
+</th:block>
+</body>
+</html>
