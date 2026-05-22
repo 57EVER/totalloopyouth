@@ -151,8 +151,8 @@ html,body{
 .category_item_featured:hover .category_featured_img{transform:scale(1.05);box-shadow:0 4px 16px rgba(0,0,0,0.15);}
 .category_icon_row{display:flex;align-items:center;}
 .category_icon_row img{width:36px;height:36px;margin-right:10px;border-radius:6px;object-fit:cover;}
-.goods_list_full{width:100%!important;display:flex;justify-content:space-between;flex-wrap:wrap;}
-.goods_list_full li{width:23%!important;float:none;margin:0 0 10px 0;}
+.goods_list_full{width:100%!important;display:flex;flex-wrap:wrap;gap:16px;justify-content:flex-start;}
+.goods_list_full li{width:220px!important;float:none;margin:0;}
 .subnav{width:198px;height:270px;border:1px solid #e8e8e8;background-color:rgba(255,255,255,0.7);border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
 .subnav li{position:relative;width:198px;height:44px;border-bottom:1px solid #f0f0f0;background:url(../images/icons.png) 178px -257px no-repeat #fff;transition:all 0.3s;}
 
