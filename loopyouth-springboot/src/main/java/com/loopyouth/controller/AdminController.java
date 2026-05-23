@@ -1,5 +1,6 @@
 package com.loopyouth.controller;
 
+import com.loopyouth.entity.AuthUser;
 import com.loopyouth.entity.GoodsContent;
 import com.loopyouth.entity.GoodsInfo;
 import com.loopyouth.entity.OrderInfo;
@@ -23,6 +24,40 @@ public class AdminController {
         this.adminService = adminService;
     }
 
+    // ---- Login (not intercepted) ----
+
+    @GetMapping("/login")
+    public String loginPage(HttpSession session) {
+        if (session.getAttribute("admin_id") != null) {
+            return "redirect:/admin/";
+        }
+        return "admin/login";
+    }
+
+    @PostMapping("/login")
+    public String loginHandle(@RequestParam String username,
+                              @RequestParam String password,
+                              HttpSession session,
+                              Model model) {
+        AuthUser admin = adminService.login(username, password);
+        if (admin == null) {
+            model.addAttribute("error", "用户名或密码错误，或该账号无管理权限");
+            return "admin/login";
+        }
+        session.setAttribute("admin_id", admin.getId());
+        session.setAttribute("admin_name", admin.getUsername());
+        return "redirect:/admin/";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.removeAttribute("admin_id");
+        session.removeAttribute("admin_name");
+        return "redirect:/admin/login";
+    }
+
+    // ---- Dashboard ----
+
     @GetMapping({"", "/"})
     public String dashboard(Model model) {
         Map<String, Object> stats = adminService.getDashboardStats();
@@ -30,6 +65,8 @@ public class AdminController {
         model.addAttribute("stats", stats);
         return "admin/dashboard";
     }
+
+    // ---- Users ----
 
     @GetMapping("/users")
     public String users(@RequestParam(defaultValue = "0") int page,
@@ -63,6 +100,8 @@ public class AdminController {
         return Map.of("ok", true);
     }
 
+    // ---- Goods ----
+
     @GetMapping("/goods")
     public String goods(@RequestParam(defaultValue = "0") int page,
                         @RequestParam(required = false) String q,
@@ -81,6 +120,8 @@ public class AdminController {
         return Map.of("ok", true);
     }
 
+    // ---- Orders ----
+
     @GetMapping("/orders")
     public String orders(@RequestParam(defaultValue = "0") int page,
                          Model model) {
@@ -89,6 +130,8 @@ public class AdminController {
         model.addAttribute("orders", orders);
         return "admin/orders";
     }
+
+    // ---- Comments ----
 
     @GetMapping("/comments")
     public String comments(@RequestParam(defaultValue = "0") int page,

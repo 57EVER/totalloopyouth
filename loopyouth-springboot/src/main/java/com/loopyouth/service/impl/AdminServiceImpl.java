@@ -10,28 +10,71 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import java.security.spec.KeySpec;
+import java.time.LocalDateTime;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
 public class AdminServiceImpl implements AdminService {
 
+    private final AuthUserRepository authUserRepo;
     private final UserInfoRepository userRepo;
     private final GoodsInfoRepository goodsRepo;
     private final OrderInfoRepository orderRepo;
     private final GoodsContentRepository commentRepo;
-    private final OrderDetailInfoRepository orderDetailRepo;
 
-    public AdminServiceImpl(UserInfoRepository userRepo,
+    public AdminServiceImpl(AuthUserRepository authUserRepo,
+                            UserInfoRepository userRepo,
                             GoodsInfoRepository goodsRepo,
                             OrderInfoRepository orderRepo,
-                            GoodsContentRepository commentRepo,
-                            OrderDetailInfoRepository orderDetailRepo) {
+                            GoodsContentRepository commentRepo) {
+        this.authUserRepo = authUserRepo;
         this.userRepo = userRepo;
         this.goodsRepo = goodsRepo;
         this.orderRepo = orderRepo;
         this.commentRepo = commentRepo;
-        this.orderDetailRepo = orderDetailRepo;
+    }
+
+    @Override
+    @Transactional
+    public AuthUser login(String username, String password) {
+        AuthUser admin = authUserRepo.findByUsername(username).orElse(null);
+        if (admin == null) return null;
+        if (!Boolean.TRUE.equals(admin.getIsActive())) return null;
+        if (!Boolean.TRUE.equals(admin.getIsSuperuser()) && !Boolean.TRUE.equals(admin.getIsStaff())) return null;
+        if (!verifyDjangoPassword(password, admin.getPassword())) return null;
+        admin.setLastLogin(LocalDateTime.now());
+        authUserRepo.save(admin);
+        return admin;
+    }
+
+    private boolean verifyDjangoPassword(String rawPassword, String encoded) {
+        // Django format: pbkdf2_sha256$<iterations>$<salt>$<b64hash>
+        String[] parts = encoded.split("\\$");
+        if (parts.length != 4 || !"pbkdf2_sha256".equals(parts[0])) return false;
+        try {
+            int iterations = Integer.parseInt(parts[1]);
+            String salt = parts[2];
+            byte[] expectedHash = Base64.getDecoder().decode(parts[3]);
+            int keyLength = expectedHash.length * 8;
+
+            KeySpec spec = new PBEKeySpec(rawPassword.toCharArray(), salt.getBytes("UTF-8"), iterations, keyLength);
+            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+            byte[] computedHash = factory.generateSecret(spec).getEncoded();
+
+            if (computedHash.length != expectedHash.length) return false;
+            int diff = 0;
+            for (int i = 0; i < computedHash.length; i++) {
+                diff |= computedHash[i] ^ expectedHash[i];
+            }
+            return diff == 0;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override

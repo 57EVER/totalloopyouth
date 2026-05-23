@@ -7,6 +7,8 @@ import java.util.Map;
 
 public interface AdminService {
 
+    AuthUser login(String username, String password);
+
     Map<String, Object> getDashboardStats();
 
     Page<UserInfo> getUsers(int page, int size, String keyword);

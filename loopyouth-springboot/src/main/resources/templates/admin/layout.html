@@ -53,8 +53,8 @@
         <header class="adm_topbar">
             <h2 th:text="${title}">页面标题</h2>
             <div class="adm_topbar_right">
-                <span th:text="${session.user_name}">admin</span>
-                <a th:href="@{/user/logout/}" class="adm_logout_btn">退出</a>
+                <span th:text="${session.admin_name}">admin</span>
+                <a th:href="@{/admin/logout}" class="adm_logout_btn">退出</a>
             </div>
         </header>
         <div class="adm_content">
