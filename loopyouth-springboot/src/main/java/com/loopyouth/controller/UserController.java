@@ -132,6 +132,7 @@ public class UserController {
 
             session.setAttribute("user_id", user.getId());
             session.setAttribute("user_name", uname);
+            session.setAttribute("is_admin", Boolean.TRUE.equals(user.getIsAdmin()));
             return "redirect:" + url;
         } else {
             long count = userService.countByUname(uname);

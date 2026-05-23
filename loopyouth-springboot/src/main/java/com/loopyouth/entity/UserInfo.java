@@ -70,6 +70,9 @@ public class UserInfo {
     @Column(name = "uname_passOrfail", nullable = false)
     private Boolean unamePassOrfail = true;
 
+    @Column(name = "is_admin", nullable = false)
+    private Boolean isAdmin = false;
+
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<GoodsBrowser> browserList = new ArrayList<>();
 

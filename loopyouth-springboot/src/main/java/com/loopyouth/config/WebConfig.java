@@ -12,6 +12,12 @@ public class WebConfig implements WebMvcConfigurer {
     @Value("${upload.path}")
     private String uploadPath;
 
+    private final AdminInterceptor adminInterceptor;
+
+    public WebConfig(AdminInterceptor adminInterceptor) {
+        this.adminInterceptor = adminInterceptor;
+    }
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/media/**")
@@ -23,10 +29,8 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // No paths intercepted by default -- controllers handle login checks inline
-        // Uncomment below to enforce login for specific paths via interceptor:
-        // registry.addInterceptor(new LoginInterceptor())
-        //         .addPathPatterns("/user/info/", "/user/order/**", "/user/site/", "/cart/**", "/order/**")
-        //         .excludePathPatterns("/user/login/", "/user/register/", "/static/**");
+        registry.addInterceptor(adminInterceptor)
+                .addPathPatterns("/admin/**")
+                .excludePathPatterns("/static/**");
     }
 }

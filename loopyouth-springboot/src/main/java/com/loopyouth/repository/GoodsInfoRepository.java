@@ -30,4 +30,9 @@ public interface GoodsInfoRepository extends JpaRepository<GoodsInfo, Integer> {
 
     @Query("SELECT g FROM GoodsInfo g ORDER BY g.gclick ASC")
     List<GoodsInfo> findRecommend(Pageable pageable);
+
+    Page<GoodsInfo> findAllByOrderByIdDesc(Pageable pageable);
+
+    @Query("SELECT g FROM GoodsInfo g WHERE g.gtitle LIKE %:keyword% OR g.gunit LIKE %:keyword% ORDER BY g.id DESC")
+    Page<GoodsInfo> adminSearch(@Param("keyword") String keyword, Pageable pageable);
 }

@@ -38,6 +38,10 @@
                     <a th:href="@{/user/info/}">用户中心</a>
                     <span>|</span>
                     <a th:href="@{/user/message/}">消息中心</a>
+                    <th:block th:if="${session.is_admin}">
+                        <span>|</span>
+                        <a th:href="@{/admin/}" style="color:#16a34a;font-weight:600">管理后台</a>
+                    </th:block>
                 </div>
             </div>
         </div>

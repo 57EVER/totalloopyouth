@@ -8,4 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface OrderInfoRepository extends JpaRepository<OrderInfo, String> {
 
     Page<OrderInfo> findByUser_IdOrderByOdateDesc(Integer userId, Pageable pageable);
+
+    Page<OrderInfo> findAllByOrderByOdateDesc(Pageable pageable);
 }
